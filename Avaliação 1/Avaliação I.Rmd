@@ -1,0 +1,300 @@
+---
+title: "Avaliação 1"
+author: "Djonathan L. O. Quadras"
+output:
+  bookdown::pdf_document2:
+    toc: false
+    
+lang: pt
+---
+
+# Atividade Proposta {-}
+
+Apresente em um vídeo de 10 minutos aproximadamente o efeito da localização de pólos e zeros usando o diagrama de Lugar das Raízes. Envie o vídeo ou um link para assistir até 12/11/2020. Sugestão: subir o vídeo a um repositório e enviar o link para `nestor.roqueiro@ufsc.br`.
+
+# O Método do Lugar das Raízes {-}
+
+Neste trabalho, será estudada uma técnica que apresenta como mudanças em um dos parâmetros de um sistema modifica as raízes de sua equação característica (os pólos de malha fechada), e assim, altera a resposta dinâmica do sistema. O dito método foi desenvolvido por **W. R. Evans** propondo regras para traçar a localização das raízes, um gráfico chamado por ele de **lugar das raízes**. O lugar das raízes é usado normalmente para o estudo do efeito da variação de um ganho de malha. Entretanto, o método é geral e pode ser usado para traçar o gráfico das raízes de qualquer polinômio em relação a um parâmetro real que age linearmente na equação. Por exemplo, o método do lugar das raízes pode ser usado para traçar gráficos das raízes da equação característica quando o ganho de um sensor de velocidade em realimentação é alterado, ou o parâmetro pode ser um parâmetro físico do sistema como a inércia ou a indutância de armadura de um motor. Finalmente, o lugar das raízes pode ser obtido para uma equação característica que resulta da análise do controle digital de sistemas usando a transformada z.
+
+
+## Lugar das raízes de um sistema realimentado básico {-}
+
+Para explicar o Lugar Geométrico das Raízes será utilizado o sistema de um realimentador básico, apresentado na Figura \@ref(fig:fig1).
+
+```{r fig1, fig.align='center', echo=FALSE, fig.cap='Diagrama de blocos do processo em malha-fechada.', out.width='30%'}
+knitr::include_graphics('Imagens/fig1.jpg', dpi = NA)
+```
+
+Para o sistema apresentado na Figura \@ref(fig:fig1), tem-se que a função de trasnferência é dada por
+
+\begin{align}
+F(s) = \frac{Y(s)}{R(s)} = \frac{D(s)G(s)}{1 + D(s)G(s)H(s)}, (\#eq:eq1)
+\end{align}
+
+e, portanto, a equação característica é dada por
+
+\begin{align}
+1 + D(s)G(s)H(s) = 0 (\#eq:eq2)
+\end{align}
+
+Será redefinida a equação \@ref(eq:eq2) para uma forma mais apropriada para o estudo das raízes, colocando-a de forma polinomial e inserindo um parâmetro variável $K$. Assume-se assim que a equação pode ser definida por meio de componentes $a(s)$ e $b(s)$, de forma que $L(s) = \frac{b(s)}{a(s)}$. Assim, tem-se que
+
+\begin{align}
+1 + KL(s) = 0, (\#eq:eq3)
+\end{align}
+
+\begin{align}
+1 + K\frac{b(s)}{a(s)} = 0 \implies a(s) + Kb(s) = 0, (\#eq:eq4)
+\end{align}
+
+\begin{align}
+L(s) = - \frac{1}{K} (\#eq:eq5)
+\end{align}
+
+As equações \@ref(eq:eq3) - \@ref(eq:eq5) as vezes são referenciadas como as formas do lugar das raízes ou as formas da equação característica de Evans. O lugar das raízes é um conjunto de valores de s para os quais essas equações são satisfeitas para algum valor positivo real de $K$. Devido às soluções das equações \@ref(eq:eq3) - \@ref(eq:eq5) serem as raízes da equação característica em malha fechada e, assim, os polos do sistema em malha fechada, o método do lugar das raízes pode ser entendido como um método para inferir propriedades dinâmicas do sistema em malha fechada quando o parâmetro $K$ é variado.
+
+## Exemplo 1 {-}
+
+Obtenha o LGR correspondente, ou seja, faça o gráfico do plano $s$ contendo todos os pólos de malha-fechada possíveis. Em seguida, calcule o ganho $K$ para que o sistema opere no ponto indicado do LGR.
+
+$$
+\frac{Y(s)}{R(s)} = \frac{K}{s+0.5}, \quad s=-1.25
+$$
+
+### Resolução {-}
+
+Tem-se que
+
+$$
+L(s) = \frac{1}{s+0.5}, \quad b(s) = 1, \quad a(s) = s+0.5
+$$
+
+Assim, aplicando-se a equação \@ref(eq:eq4),
+
+$$
+a(s) + Kb(s) = 0 \implies s+0.5 + K = 0 \implies \boxed{s = -0.5-K}
+$$
+
+Ou seja, o LGR está definido para todo $s < -0.5$, para qualquer valor de $K>0$. Isso é comprovado utilizando a função `rlocus(tf([1],[1 0.5]))` no matlab. O resultante da função apresentada está apresentado na figura \@ref(fig:fig2). O ganho $K$ para $s = -1.75$ é dado por
+
+$$
+s = -0.5-K \implies -1.75 = -0.5 - K \implies \boxed{K = 0.75}
+$$
+
+```{r fig2, fig.align='center', echo=FALSE, fig.cap='LGR do Exercício 1', out.width='40%'}
+knitr::include_graphics('Imagens/fig2.jpg', dpi = NA)
+```
+
+## Exemplo 2 {-}
+
+Obtenha o LGR correspondente, ou seja, faça o gráfico do plano $s$ contendo todos os pólos de malha-fechada possíveis. Em seguida, calcule o ganho $K$ para que o sistema opere no ponto indicado do LGR.
+
+$$
+\frac{Y(s)}{R(s)} = \frac{K}{(s+2)(s+4)}=\frac{K}{s^2+6s+8}, \quad s=-3
+$$
+
+### Resolução {-}
+
+Tem-se que
+
+$$
+L(s) = \frac{1}{s^2+6s+8}, \quad b(s) = 1, \quad a(s) = s^2+6s+8
+$$
+
+Assim, aplicando-se a equação \@ref(eq:eq4),
+
+$$
+a(s) + Kb(s) = 0 \implies s^2+6s+8 + K = 0 \implies \boxed{s = \frac{-6\pm\sqrt{36-4(1)(8+k)}}{2(1)}}
+$$
+
+
+```{r fig3, fig.align='center', echo=FALSE, fig.cap='LGR do Exercício 2', out.width='40%'}
+knitr::include_graphics('Imagens/fig3.jpg', dpi = NA)
+```
+
+Assim, pode-se determinar que as raízes reais estão entre $0 \leq K \leq 1$, sendo representadas por $-4 \leq s \leq -2$ e as raízes imaginárias estão para $K > 1$. Isso é comprovado utilizando a função `rlocus(tf([1],[1 6 8]))` no matlab. O resultante da função apresentada está apresentado na figura \@ref(fig:fig3). O ganho $K$ para $s = -3$ é dado por
+
+$$
+-3= \frac{-6\pm\sqrt{36-4(8+k)}}{2} \implies \sqrt{36-4(8+k)} = 0 \implies \boxed{K = 1}
+$$
+
+
+## Método de Evans {-}
+
+O método apresentado anteriormente não é muito útil uma vez que deve ser feito o cálculo para cada valor de $K$. Para solucionar esse problema (uma vez que $K$ varia para um número infinito de valores), ao final da década de 1940 Walter R. Evans publicou diversos estudos nos quais ele proprunha que deveria se considerar variações infinitas de algum parâmetro (a princípio o ganho $K$). Esse método é composto por uma série de procedimentos (regras) que serão apresentados abaixo.
+
+### **Regra 1:** Número de Ramos do LGR {-}
+
+Em geral, um sistema de controle tem maioria de pólos em relação a zeros. O número de ramos de um LGR será igual ao número de pólos contidos na função de transferência de malha-fechada. Esses pólos correspondem ao número de pólos na função de transferência de malha aberta $G(s)H(s)$. Portanto, um LG terá tantos ramos quanto pólos contidos em $G(s)H(s)$. Por ramo, se entende toda trajetória que sege um determinado pólo de malha-fechada como consequência da variação de ganho, de modo que haverá tantos ramos quanto corresponda ao grau da função de transferência de malha-aberta.
+
+### **Regra 2:** Princípio e fim do LGR {-}
+
+Os Lugares Geométricos se iniciam nos pólos e terminam nos zeros. Se não existirem zeros, os LG terminarão no infinito. A função dos zeros é atrair os lugares que vêm dos pólos.
+
+### **Regra 3:** Lugares Geométricos no eixo real {-}
+
+Os Lugares Geométricos que existem no eixo real se situam à esquerda dos elementos ímpares, mas começam com o elemento mais à direita.
+
+### **Regra 4:** Simetria dos Lugares Geométricos Complexos {-}
+
+Esta regra é, na realidade, uma consequência lógica uma vez que é característica dos lugares geométricos onde a parte real é mesma e a componente imaginária sempre será o complexo conjugado do ramo associado.
+
+As regras 5 e 6 são aplicadas apenas quando os lugares geométricos tendem ao infinito. 
+
+### **Regra 5:** Assíntotas {-}
+
+Para ganhos elevados, e em ausência de zeros, os ramos do lugar geométrico tendem a se comportar como linhas retas de modo assíntoto, as quais abandonam o eixo real com um ângulo $\theta$ dado por
+
+\begin{align}
+\theta = \frac{180+360k}{n-m}, (\#eq:eq6)
+\end{align}
+
+onde $n$ é o número de pólos de $G(s)H(s)$, $m$ é o número de zeros de $G(s)H(s)$ e $k$ é um número inteiro.
+
+### **Regra 6:** Centróide {-}
+
+O centróide é o ponto no eixo real do qual as assíntotas divergem e é determinado por:
+
+
+\begin{align}
+\sigma = \frac{\sum^n_{i=1}G(s)H(s)-\sum^m_{i=1}G(s)H(s)}{n-m} (\#eq:eq7)
+\end{align}
+
+### **Regra 7:** Cruzamento do LG com o eixo imaginário {-}
+
+Os pontos nos quais os LG cruzam o eixo imaginário $j\omega$, assim como o valor do ganho $K$ neste ponto, são obtidos substituindo $s$ por $j\omega$ na equação característica. Esa regra é de grande importância uma vez que os valores de ganho e o cruzamento do eixo $j\omega$, assim com a frequência neste ponto, são fundamentais para o desenho dos controladores.
+
+### **Regra 8:** Ângulos de saída $\phi$ e ângulos de chegada $\phi'$ {-}
+
+O ângulo de saída de um ramo associado com um polo complexo (chamado de polo de baixa consideração) corresponde à soma das contribuições angulares de todos os pólos restantes de $G(s)H(s)$ ao polo de baixa consideração. A soma de todas as contribuições angulares dos zeros de $G(s)H(s)$ ao polo de baixa consideração $+ \phi = 180 ^\circ$.
+
+O ângulo de chegada ssociado a um zero complexo (chamado de zero de baixa consideração) corresponde a soma das constibuições angulares de todos os pólos de $G(s)H(s)$ ao zero de baixa consideração. A soma de todas as contribuições angulares dos zeros restantes de $G(s)H(s)$ ao zero de baixa consideração $- \phi' = 180^\circ$.
+
+### **Regra 9:**  Pontos de saída e pontos de chegada {-}
+
+Os lugares geométricos que saem do eixo real (em consequência da adjacência entre os pólos) o farão com o máximo ganho possível que pode ocorrer entre a região real delimitada pelos pólos adjacentes.
+
+Os ramos dos lugares geométricos (provenientes dos pólos) chegam ao eixo real com um ganho que corresponde ao valor mínimo possível, dentro de um intervalo limitado sobre o eixo real.
+
+
+
+## Exemplo 3 {-}
+
+Obtenha os lugares geométricos para a função de transferência de malha-aberta abaixo. Considere que o ganho varia de zero a infinito.
+
+$$
+G(s)H(s) = \frac{K}{s^3+2s^2+2.5s+1.5}
+$$
+
+### Resolução {-}
+
+A função de transferência de malha-acerta tem três polos e nenhum zero. São eles: $p_1 = -1$, $p_{2,3} = -0.5 \pm j1.118$. Aplica-se agora as regras.
+
+**Número de ramos do LGR:** O LG terá três ramos, uma vez que estes são determinados pelo número de pólos.
+
+**Princípio e fim do LGR:** Os LG iniciam nos pólos, enquanto que com incrementos de ganho e ausência de zeros, os três tamos terminarão no inifito.
+
+**Lugares geométricos no eixo real:** Como há um elemento no eixo real, haverá um LG iniciando no pólo $p_1 = -1$ se prolongando até o infinito negativo.
+
+**Simetria dos LG complexos:** A existência de pólos complexos é motivo suficiente para garantir a presença de assíntotas, as quais abandonarão o eixo real no ponto denominado centróide.
+
+**Assíntotas e Centróide:** Como os lugares geométricos tendem ao infinito de acordo com a regra 2, pode-se concluir que há presença de assíntotas as quais abandonarão o eixo real no ponto determinado pelo centróide. O cálculo das assíntotas se dá por meio da equação \@ref(eq:eq6), onde deve-se considerar o sistema com 3 pólos e nenhum zero. Deve-se realizar os cálculos de acordo com o número de ramos que tendem ao infinito. Dessa forma, será calculado para $k = 0,-1,1$. Assim, para 
+
+$$
+\theta = \frac{180+360k}{n-m}, \quad n = 3, \quad m = 0,
+$$
+ tem-se
+ 
+$$
+\theta(k=0) = `r (180/3)`^\circ, \quad \theta(k=-1) = `r (180-360)/3`^\circ, \quad \theta(k=1) = `r (180+360)/3`^\circ.
+$$
+
+Agora, sabendo as três assíntotas necessárias, será calculado o centróide $\sigma$.
+
+$$
+\sigma = \frac{-1-0.5+j1.118-0.5-j.118-0}{3-0} = `r round((-1-0.5-0.5)/3,2)`
+$$
+
+A Figura \@ref(fig:fig4) apresenta o gráfico. Percebe-se que o gráfico encontrado por meio do Matlab está de acordo com o teórico.
+
+```{r fig4, fig.align='center', echo=FALSE, fig.cap='LGR do Exercício 3', out.width='40%'}
+knitr::include_graphics('Imagens/fig4.jpg', dpi = NA)
+```
+
+## Exemplo 4 {-}
+
+Com respeito à função de transferência de malha-aberta abaixo, justifique por que se aplica ou não cada uma das regras para se obter o LGR respectivo.
+
+$$
+G(s)H(s) = \frac{K}{(s+1)(s+6)(s+8)} = \frac{K}{s^3+15s^2+62s+48}
+$$
+
+### Resolução {-}
+
+Pode-se perceber de início que o sistema proposto não possui zeros e possui 3 pólos ($p_1 = -1$, $p_2 = -6$, $p_3 = -8$).
+
+**Número de ramos do LGR:** O LGR contará com três ramos pois $G(s)H(s)$ possui três pólos.
+
+**Princípio e fim do LGR:** Os três lugares geométricos irão terminar no infinito já que não possuem zeros na configuração.
+
+**Lugares geométricos no eixo real:** Heverá dois LG no eixo real localizados em $-6 < s <-1$ e $-\infty<s<-8$.
+
+**Simetria dos LG complexos:** A presença de pólos adjacentes assegura que, com incrementos de ganho, dois dos ramos terão comportamento complexo, pelo qual haverá simetria de tais elementos em relação ao eixo real.
+
+**Assíntotas e Centróide:** Como os três lugares geométricos tendem ao infinito, são necessárias três assíntotas, as quais são obtidas por meio da equação \@ref(eq:eq6), assim como um centróide para localizar o ponto de divergência das assíntotas sobre o eixo real. O centróide é obtido por meio da equação \@ref(eq:eq7).
+
+Assíntotas:
+
+$$
+\theta(k=0) = `r (180/3)`^\circ, \quad \theta(k=-1) = `r (180-360)/3`^\circ, \quad \theta(k=1) = `r (180+360)/3`^\circ.
+$$
+
+Centróide:
+
+$$
+\sigma = \frac{-8-6-1-0}{3-0} = `r round((-8-6-1)/3,2)`
+$$
+
+**Cruzamento do LG com o eixo imaginário:** Devido ao fato de que duas assíntotas se localizam a $\pm 60^\circ$, se supõe que com incrementos de ganho os lugares geométricos cruzarão o eixo $j\omega$. A função de transferência de malha-fechada $T(s)$ associada $G(s)H(s)$ de onde se supõe que $H(s) = 1$ corresponde a:
+
+$$
+T(s) \frac{K}{s^3 + 15s^2 + 62s + (48+K)}
+$$
+
+Desta forma, substituindo $s$ por $j\omega$ na equação característica, tanto o ganho $K$ no ponto de cruzamento com o eixo imaginário $j\omega$ quanto a frequência w no referido ponto de cruzamento obtem-se:
+
+$$
+\left. s^3 + 15s^2 + 62s + (48+K) \right|_{s=j\omega}
+$$
+
+
+Sendo o polinômio $1 + G(s)H(s)=0$, onde o ganho $K$ está implícito no fator $G(s)$. Para o caso:
+
+$$
+1 + \frac{K}{(s+1)(s+6)(s+8)} = 0
+$$
+
+de tal forma que se a equação for reordenada tem-se
+
+$$
+K = -(s^3 + 15s^2 + 62s + 48)
+$$
+
+Onde o ganho máximo é de
+
+$$
+\frac{dK}{ds} = 0 = -3s^2-30s-62
+$$
+
+As raízes da equação são $r_1 = -7.0817$ e  $r_2 = -2.9183$. O que indica que o ponto de saída é em $s = -2.9183$ com ganho $K = `r round(-((-2.9183)^3+15*(-2.9183)^2+(62*-2.9183)+48),2)`$.
+
+
+**Ângulo de saída e ângulo de chegada:** Posto que $G(s)H(s)$ não apresenta pólos nem zeros complexos, não existirão ângulos de saída nem de entrada.
+
+**Pontos de saída e chegada:** A presença de dois pólos adjacentes $p_1 = -1$ e $p_2 = -6$ confirmam a existência de um ponto de saída, o qual se situa em $s = -2.9183$. Como não existem zeros no eixo real, não se apresentarão pontos de chegada.
+
+A Figura \@ref(fig:fig5) apresenta o gráfico. Percebe-se que o gráfico encontrado por meio do Matlab está de acordo com o teórico.
+
+```{r fig5, fig.align='center', echo=FALSE, fig.cap='LGR do Exercício 4', out.width='40%'}
+knitr::include_graphics('Imagens/fig5.jpg', dpi = NA)
+```
